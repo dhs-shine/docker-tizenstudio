@@ -2,8 +2,8 @@ FROM ubuntu:16.04
 
 ARG user=developer
 ARG group=developer
-ARG uid=1000
-ARG gid=1000
+ARG uid=2000
+ARG gid=2000
 
 # Install prerequisites
 RUN \

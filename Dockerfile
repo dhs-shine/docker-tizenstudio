@@ -50,6 +50,30 @@ RUN \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /var/cache/oracle-jdk8-installer
 
+# Install dotnet core prerequisites
+RUN \
+  apt-get update \
+  && apt-get install -y \
+  libunwind8 \
+  liblttng-ust0 \
+  libcurl3 \
+  libssl1.0.0 \
+  libuuid1 \
+  libkrb5-3 \
+  zlib1g \
+  libicu55 \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install dotnet core 2.0 sdk
+RUN \
+  curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
+  && mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+RUN \
+  sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
+  && apt-get update \
+  && apt-get install -y dotnet-sdk-2.0.0 \
+  && rm -rf /var/lib/apt/lists/*
+
 # Add a user
 ENV HOME /home/${user}
 RUN groupadd -g ${gid} ${group} \

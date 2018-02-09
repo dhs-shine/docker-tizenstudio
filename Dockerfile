@@ -39,6 +39,7 @@ RUN \
   make \
   bridge-utils \
   openvpn \
+  git \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Java

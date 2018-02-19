@@ -83,12 +83,12 @@ RUN groupadd -g ${gid} ${group} \
 USER ${user}
 WORKDIR ${HOME}
 
-# Install tizen studio 2.1
+# Install tizen studio 2.2
 RUN \
-  wget http://download.tizen.org/sdk/Installer/tizen-studio_2.1/web-cli_Tizen_Studio_2.1_ubuntu-64.bin \
-  && chmod +x web-cli_Tizen_Studio_2.1_ubuntu-64.bin \
-  && echo y | ./web-cli_Tizen_Studio_2.1_ubuntu-64.bin --accept-license \
-  && rm -rf web-cli_Tizen_Studio_2.1_ubuntu-64.bin
+  wget http://download.tizen.org/sdk/Installer/tizen-studio_2.2/web-cli_Tizen_Studio_2.2_ubuntu-64.bin \
+  && chmod +x web-cli_Tizen_Studio_2.2_ubuntu-64.bin \
+  && echo y | ./web-cli_Tizen_Studio_2.2_ubuntu-64.bin --accept-license \
+  && rm -rf web-cli_Tizen_Studio_2.2_ubuntu-64.bin
 
 # Set PATH
 ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/

@@ -40,6 +40,7 @@ RUN \
   bridge-utils \
   openvpn \
   git \
+  ruby \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Java
@@ -90,5 +91,9 @@ RUN \
   && echo y | ./web-cli_Tizen_Studio_2.2_ubuntu-64.bin --accept-license \
   && rm -rf web-cli_Tizen_Studio_2.2_ubuntu-64.bin
 
+# Install sdk-build
+RUN \
+  git clone git://git.tizen.org/sdk/tools/sdk-build -b tizen
+
 # Set PATH
-ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/
+ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/:$HOME/sdk-build

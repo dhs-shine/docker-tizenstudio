@@ -41,6 +41,13 @@ RUN \
   openvpn \
   git \
   ruby \
+  flex \
+  bison \
+  libgtest-dev \
+  libperl-dev \
+  libgtk2.0-dev \
+  build-essential \
+  cmake \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Java
@@ -97,3 +104,17 @@ RUN \
 
 # Set PATH
 ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/:$HOME/sdk-build
+
+# Build and install tidl
+RUN \
+  cd /usr/src/gtest \
+  && cmake CMakeLists.txt \
+  && make \
+  && cp *.a /usr/lib
+RUN \
+  git clone git://git.tizen.org/platform/core/appfw/tidl -b accepted/tizen_unified \
+  && cd tidl \
+  && ./build.sh build \
+  && cp ./build/idlc/tidlc /usr/local/bin/tidlc \
+  && cd .. \
+  && rm -rf tidl

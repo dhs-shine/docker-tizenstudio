@@ -105,12 +105,14 @@ RUN \
 # Set PATH
 ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/:$HOME/sdk-build
 
+USER root
 # Build and install tidl
 RUN \
   cd /usr/src/gtest \
   && cmake CMakeLists.txt \
   && make \
-  && cp *.a /usr/lib
+  && cp *.a /usr/lib \
+  && make clean
 RUN \
   git clone git://git.tizen.org/platform/core/appfw/tidl -b accepted/tizen_unified \
   && cd tidl \
@@ -118,3 +120,4 @@ RUN \
   && cp ./build/idlc/tidlc /usr/local/bin/tidlc \
   && cd .. \
   && rm -rf tidl
+USER ${user}

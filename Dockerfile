@@ -99,7 +99,7 @@ RUN \
 RUN \
   sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
   && apt-get update \
-  && apt-get install -y dotnet-sdk-2.0.0 \
+  && apt-get install -y dotnet-sdk-2.0.3 \
   && rm -rf /var/lib/apt/lists/*
 
 # Add a user

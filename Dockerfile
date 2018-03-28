@@ -125,6 +125,5 @@ RUN \
 ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/:$HOME/sdk-build
 
 USER root
-COPY --from=build /usr/src/gtest/*.a /usr/lib/
 COPY --from=build /usr/local/bin/tidlc /usr/local/bin/tidlc
 USER ${user}

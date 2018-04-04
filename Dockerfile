@@ -1,4 +1,4 @@
-FROM ubuntu:16.04 as build
+FROM ubuntu:16.04 as tidlc
 
 RUN \
   apt-get update \
@@ -19,7 +19,7 @@ RUN \
   && make \
   && cp ./*.a /usr/lib/
 RUN \
-  git clone git://git.tizen.org/platform/core/appfw/tidl -b accepted/tizen_unified \
+  git clone https://git.tizen.org/cgit/platform/core/appfw/tidl -b tizen \
   && cd tidl \
   && ./build.sh build \
   && cp ./build/idlc/tidlc /usr/local/bin/tidlc
@@ -68,6 +68,7 @@ RUN \
   git \
   ruby \
   nuget \
+  tzdata \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Java
@@ -123,8 +124,19 @@ RUN \
   git clone git://git.tizen.org/sdk/tools/sdk-build -b tizen
 
 # Set PATH
-ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/:$HOME/sdk-build
+ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/:$HOME/sdk-build/
 
 USER root
-COPY --from=build /usr/local/bin/tidlc /usr/local/bin/tidlc
+
+# Copy tidlc binary
+COPY --from=tidlc /usr/local/bin/tidlc /usr/local/bin/tidlc
+
+# Setup timezone to avoid error from nuget cli
+ENV TZ 'Asia/Seoul'
+RUN \
+  echo $TZ > /etc/timezone \
+  && rm /etc/localtime \
+  && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+  && dpkg-reconfigure -f noninteractive tzdata
+
 USER ${user}

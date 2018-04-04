@@ -67,6 +67,7 @@ RUN \
   openvpn \
   git \
   ruby \
+  nuget \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Java

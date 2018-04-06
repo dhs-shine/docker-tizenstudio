@@ -69,6 +69,7 @@ RUN \
   ruby \
   nuget \
   tzdata \
+  virtualenv \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Java

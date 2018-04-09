@@ -113,7 +113,7 @@ RUN \
   && rm -rf /var/lib/apt/lists/* \
   && wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe \
   && mv nuget.exe /usr/lib/nuget.exe \
-  && sh -c 'echo "#!/bin/bash \n/usr/bin/cli /usr/lib/nuget.exe" > /usr/bin/nuget' \
+  && sh -c 'echo "#!/bin/bash \n/usr/bin/cli /usr/lib/nuget.exe \$@" > /usr/bin/nuget' \
   && chmod 755 /usr/bin/nuget
 
 # Add a user

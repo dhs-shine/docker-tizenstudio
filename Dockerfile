@@ -143,6 +143,13 @@ USER root
 # Copy tidlc binary
 COPY --from=tidlc /usr/local/bin/tidlc /usr/local/bin/tidlc
 
+# Setup python3 virtualenv
+RUN \
+  virtualenv venv -p python3 \
+  && . venv/bin/activate \
+  && pip install requests pyyaml \
+  && deactivate
+
 # Setup timezone to avoid error from nuget cli
 ENV TZ 'Asia/Seoul'
 RUN \

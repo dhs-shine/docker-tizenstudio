@@ -69,6 +69,8 @@ RUN \
   ruby \
   tzdata \
   virtualenv \
+  python \
+  python-requests \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Java

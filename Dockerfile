@@ -149,7 +149,7 @@ COPY --from=tidlc /usr/local/bin/tidlc /usr/local/bin/tidlc
 RUN \
   virtualenv venv -p python3 \
   && . venv/bin/activate \
-  && pip install requests pyyaml lxml \
+  && pip install requests pyyaml lxml jinja2 \
   && deactivate
 
 # Setup timezone to avoid error from nuget cli

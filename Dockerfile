@@ -71,6 +71,8 @@ RUN \
   virtualenv \
   python \
   python-requests \
+  python-pycurl \
+  python-lxml \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Java

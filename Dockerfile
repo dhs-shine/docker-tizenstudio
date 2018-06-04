@@ -120,39 +120,8 @@ RUN \
   && sh -c 'echo "#!/bin/bash \n/usr/bin/cli /usr/lib/nuget.exe \$@" > /usr/bin/nuget' \
   && chmod 755 /usr/bin/nuget
 
-# Add a user
-ENV HOME /home/${user}
-RUN groupadd -g ${gid} ${group} \
-  && useradd -d "$HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
-
-USER ${user}
-WORKDIR ${HOME}
-
-# Install tizen studio 2.3
-RUN \
-  wget http://download.tizen.org/sdk/Installer/tizen-studio_2.3/web-cli_Tizen_Studio_2.3_ubuntu-64.bin \
-  && chmod +x web-cli_Tizen_Studio_2.3_ubuntu-64.bin \
-  && echo y | ./web-cli_Tizen_Studio_2.3_ubuntu-64.bin --accept-license \
-  && rm -rf web-cli_Tizen_Studio_2.3_ubuntu-64.bin
-
-# Install sdk-build
-RUN \
-  git clone git://git.tizen.org/sdk/tools/sdk-build -b tizen
-
-# Set PATH
-ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/:$HOME/sdk-build/
-
-USER root
-
 # Copy tidlc binary
 COPY --from=tidlc /usr/local/bin/tidlc /usr/local/bin/tidlc
-
-# Setup python3 virtualenv
-RUN \
-  virtualenv venv -p python3 \
-  && . venv/bin/activate \
-  && pip install requests pyyaml lxml jinja2 \
-  && deactivate
 
 # Setup timezone to avoid error from nuget cli
 ENV TZ 'Asia/Seoul'
@@ -162,4 +131,31 @@ RUN \
   && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && dpkg-reconfigure -f noninteractive tzdata
 
+# Add a user
+ENV HOME /home/${user}
+RUN groupadd -g ${gid} ${group} \
+  && useradd -d "$HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+
 USER ${user}
+WORKDIR ${HOME}
+
+# Install tizen studio 2.4
+RUN \
+  wget http://download.tizen.org/sdk/Installer/tizen-studio_2.4/web-cli_Tizen_Studio_2.4_ubuntu-64.bin \
+  && chmod +x web-cli_Tizen_Studio_2.4_ubuntu-64.bin \
+  && echo y | ./web-cli_Tizen_Studio_2.4_ubuntu-64.bin --accept-license \
+  && rm -rf web-cli_Tizen_Studio_2.4_ubuntu-64.bin
+
+# Install sdk-build
+RUN \
+  git clone git://git.tizen.org/sdk/tools/sdk-build -b tizen
+
+# Set PATH
+ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/:$HOME/sdk-build/
+
+# Setup python3 virtualenv
+RUN \
+  virtualenv venv -p python3 \
+  && . venv/bin/activate \
+  && pip install requests pyyaml lxml jinja2 \
+  && deactivate

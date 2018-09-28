@@ -51,7 +51,7 @@ RUN \
   python3-lxml \
   python3-yaml \
   python3-jinja2 \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
   && rm -rf /etc/apt/sources.list.d/*
 
 # Install Java
@@ -75,7 +75,7 @@ RUN \
   libkrb5-3 \
   zlib1g \
   libicu55 \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
   && rm -rf /etc/apt/sources.list.d/*
 
 # Install dotnet core 2.0 sdk
@@ -86,7 +86,7 @@ RUN \
   sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
   && apt-get update \
   && apt-get install -y dotnet-sdk-2.0.3 \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
   && rm -rf /etc/apt/sources.list.d/*
 
 # Install mono-devel and nuget

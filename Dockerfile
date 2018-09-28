@@ -1,29 +1,3 @@
-FROM ubuntu:16.04 as tidlc
-
-RUN \
-  apt-get update \
-  && apt-get install -y \
-  git \
-  flex \
-  bison \
-  libgtest-dev \
-  libperl-dev \
-  libgtk2.0-dev \
-  build-essential \
-  cmake \
-  && rm -rf /var/lib/apt/lists/*
-  
-RUN \
-  cd /usr/src/gtest \
-  && cmake CMakeLists.txt \
-  && make \
-  && cp ./*.a /usr/lib/
-RUN \
-  git clone https://git.tizen.org/cgit/platform/core/appfw/tidl -b tizen \
-  && cd tidl \
-  && ./build.sh build \
-  && cp ./build/idlc/tidlc /usr/local/bin/tidlc
-
 FROM ubuntu:16.04
 
 ARG user=developer
@@ -73,7 +47,12 @@ RUN \
   python-requests \
   python-pycurl \
   python-lxml \
+  python3-requests \
+  python3-lxml \
+  python3-yaml \
+  python3-jinja2 \
   && rm -rf /var/lib/apt/lists/*
+  && rm -rf /etc/apt/sources.list.d/*
 
 # Install Java
 RUN \
@@ -97,6 +76,7 @@ RUN \
   zlib1g \
   libicu55 \
   && rm -rf /var/lib/apt/lists/*
+  && rm -rf /etc/apt/sources.list.d/*
 
 # Install dotnet core 2.0 sdk
 RUN \
@@ -107,6 +87,7 @@ RUN \
   && apt-get update \
   && apt-get install -y dotnet-sdk-2.0.3 \
   && rm -rf /var/lib/apt/lists/*
+  && rm -rf /etc/apt/sources.list.d/*
 
 # Install mono-devel and nuget
 RUN \
@@ -119,9 +100,6 @@ RUN \
   && mv nuget.exe /usr/lib/nuget.exe \
   && sh -c 'echo "#!/bin/bash \n/usr/bin/cli /usr/lib/nuget.exe \$@" > /usr/bin/nuget' \
   && chmod 755 /usr/bin/nuget
-
-# Copy tidlc binary
-COPY --from=tidlc /usr/local/bin/tidlc /usr/local/bin/tidlc
 
 # Setup timezone to avoid error from nuget cli
 ENV TZ 'Asia/Seoul'
@@ -139,12 +117,12 @@ RUN groupadd -g ${gid} ${group} \
 USER ${user}
 WORKDIR ${HOME}
 
-# Install tizen studio 2.4
+# Install tizen studio 2.5
 RUN \
-  wget http://download.tizen.org/sdk/Installer/tizen-studio_2.4/web-cli_Tizen_Studio_2.4_ubuntu-64.bin \
-  && chmod +x web-cli_Tizen_Studio_2.4_ubuntu-64.bin \
-  && echo y | ./web-cli_Tizen_Studio_2.4_ubuntu-64.bin --accept-license \
-  && rm -rf web-cli_Tizen_Studio_2.4_ubuntu-64.bin
+  wget http://download.tizen.org/sdk/Installer/tizen-studio_2.5/web-cli_Tizen_Studio_2.5_ubuntu-64.bin \
+  && chmod +x web-cli_Tizen_Studio_2.5_ubuntu-64.bin \
+  && echo y | ./web-cli_Tizen_Studio_2.5_ubuntu-64.bin --accept-license \
+  && rm -rf web-cli_Tizen_Studio_2.5_ubuntu-64.bin
 
 # Install sdk-build
 RUN \

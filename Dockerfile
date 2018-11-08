@@ -78,14 +78,14 @@ RUN \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /etc/apt/sources.list.d/*
 
-# Install dotnet core 2.0 sdk
+# Install dotnet core 2.1 sdk
 RUN \
   curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
   && mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
 RUN \
   sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
   && apt-get update \
-  && apt-get install -y dotnet-sdk-2.0.3 \
+  && apt-get install -y dotnet-sdk-2.1 \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /etc/apt/sources.list.d/*
 

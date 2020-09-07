@@ -54,15 +54,6 @@ RUN \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /etc/apt/sources.list.d/*
 
-# Install Java
-RUN \
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
-  && add-apt-repository -y ppa:webupd8team/java \
-  && apt-get update \
-  && apt-get install -y oracle-java8-installer \
-  && rm -rf /var/lib/apt/lists/* \
-  && rm -rf /var/cache/oracle-jdk8-installer
-
 # Install dotnet core prerequisites
 RUN \
   apt-get update \
@@ -78,14 +69,13 @@ RUN \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /etc/apt/sources.list.d/*
 
-# Install dotnet core 2.1 sdk
+# Install dotnet core 3.1 sdk
 RUN \
-  curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
-  && mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+  wget https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+  && dpkg -i packages-microsoft-prod.deb
 RUN \
-  sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
-  && apt-get update \
-  && apt-get install -y dotnet-sdk-2.1 \
+  apt-get update && \
+  apt-get install -y dotnet-sdk-3.1 \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /etc/apt/sources.list.d/*
 
@@ -96,18 +86,6 @@ RUN \
   && apt-get update \
   && apt-get install -y nuget mono-devel \
   && rm -rf /var/lib/apt/lists/*
-#  && wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe \
-#  && mv nuget.exe /usr/lib/nuget.exe \
-#  && sh -c 'echo "#!/bin/bash \n/usr/bin/cli /usr/lib/nuget.exe \$@" > /usr/bin/nuget' \
-#  && chmod 755 /usr/bin/nuget
-
-# Setup timezone to avoid error from nuget cli
-ENV TZ 'Asia/Seoul'
-RUN \
-  echo $TZ > /etc/timezone \
-  && rm /etc/localtime \
-  && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
-  && dpkg-reconfigure -f noninteractive tzdata
 
 # Add a user
 ENV HOME /home/${user}
@@ -117,12 +95,12 @@ RUN groupadd -g ${gid} ${group} \
 USER ${user}
 WORKDIR ${HOME}
 
-# Install tizen studio 2.5
+# Install tizen studio 3.7
 RUN \
-  wget http://download.tizen.org/sdk/Installer/tizen-studio_2.5/web-cli_Tizen_Studio_2.5_ubuntu-64.bin \
-  && chmod +x web-cli_Tizen_Studio_2.5_ubuntu-64.bin \
-  && echo y | ./web-cli_Tizen_Studio_2.5_ubuntu-64.bin --accept-license \
-  && rm -rf web-cli_Tizen_Studio_2.5_ubuntu-64.bin
+  wget http://download.tizen.org/sdk/Installer/tizen-studio_3.7/web-cli_Tizen_Studio_3.7_ubuntu-64.bin \
+  && chmod +x web-cli_Tizen_Studio_3.7_ubuntu-64.bin \
+  && echo y | ./web-cli_Tizen_Studio_3.7_ubuntu-64.bin --accept-license \
+  && rm -rf web-cli_Tizen_Studio_3.7_ubuntu-64.bin
 
 # Install sdk-build
 RUN \
@@ -130,10 +108,3 @@ RUN \
 
 # Set PATH
 ENV PATH $PATH:$HOME/tizen-studio/tools/ide/bin/:$HOME/tizen-studio/package-manager/:$HOME/sdk-build/
-
-# Setup python3 virtualenv
-RUN \
-  virtualenv venv -p python3 \
-  && . venv/bin/activate \
-  && pip install requests pyyaml lxml jinja2 \
-  && deactivate
